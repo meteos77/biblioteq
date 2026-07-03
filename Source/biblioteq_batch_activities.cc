@@ -342,6 +342,9 @@ biblioteq_batch_activities::biblioteq_batch_activities(biblioteq *parent):
 	  SIGNAL(currentChanged(int)),
 	  this,
 	  SLOT(slotPageIndexChanged(int)));
+  m_ui.add_table->horizontalHeader()->setSortIndicator
+    (static_cast<int> (AddTableColumns::IDENTIFIER_COLUMN),
+     Qt::AscendingOrder);
   m_ui.add_table->setItemDelegateForColumn
     (static_cast<int> (AddTableColumns::CATEGORY_COLUMN),
      new biblioteq_batch_activities_item_delegate("add_table",
@@ -350,7 +353,9 @@ biblioteq_batch_activities::biblioteq_batch_activities(biblioteq *parent):
     (static_cast<int> (AddTableColumns::QUERY_SYSTEM_COLUMN),
      new biblioteq_batch_activities_item_delegate("add_table",
 						  m_ui.add_table));
-  m_ui.discover_table->sortByColumn(0, Qt::AscendingOrder);
+  m_ui.discover_table->sortByColumn
+    (static_cast<int> (DiscoverTableColumns::IDENTIFIER_COLUMN),
+     Qt::AscendingOrder);
   m_ui.dreamy_date->setDisplayFormat
     (QLocale().dateFormat(QLocale::LongFormat));
   m_ui.dreamy_table->horizontalHeader()->setSortIndicator
@@ -1510,7 +1515,9 @@ void biblioteq_batch_activities::slotDeleteAddingRow(void)
 
       if(toolButton == widget->findChild<QToolButton *> ())
 	{
+	  m_ui.add_table->setSortingEnabled(false);
 	  m_ui.add_table->removeRow(i);
+	  m_ui.add_table->setSortingEnabled(true);
 	  break;
 	}
     }
@@ -2378,6 +2385,7 @@ void biblioteq_batch_activities::slotScanAddingTimerTimeout(void)
 	      SIGNAL(clicked(void)),
 	      this,
 	      SLOT(slotDeleteAddingRow(void)));
+      m_ui.add_table->setSortingEnabled(false);
       m_ui.add_table->setRowCount(row + 1);
       m_ui.add_table->setCellWidget
 	(row, static_cast<int> (AddTableColumns::DELETE_COLUMN), widget);
@@ -2395,6 +2403,7 @@ void biblioteq_batch_activities::slotScanAddingTimerTimeout(void)
 	(row, static_cast<int> (AddTableColumns::QUERY_SYSTEM_COLUMN), item);
       toolButton->setIcon
 	(QIcon::fromTheme("list-remove", QIcon(":/16x16/eraser.png")));
+      m_ui.add_table->setSortingEnabled(true);
 
       if(m_ui.bottom_scroll_on_add->isChecked())
 	m_ui.add_table->scrollToBottom();
