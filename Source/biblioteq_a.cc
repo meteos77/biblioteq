@@ -1251,6 +1251,12 @@ biblioteq::biblioteq(void):QMainWindow()
       ui.menuEntriesPerPage->addAction(action);
     }
 
+  if(ui.menuEntriesPerPage->actions().isEmpty())
+    {
+      group1->deleteLater();
+      ui.menuEntriesPerPage->addAction(tr("None"));
+    }
+
   preparePhotographsPerPageMenu();
   prepareReservationHistoryMenu();
 
